@@ -17,16 +17,12 @@
         "x-zuplo-route": {
           "corsPolicy": "none",
           "handler": {
-            "export": "urlForwardHandler",
-            "module": "$import(@zuplo/runtime)",
-            "options": {
-              "baseUrl": "https://site.web.api.espn.com/apis/v2/sports/baseball/mlb"
-            }
+            "export": "default",
+            "module": "$import(./modules/standings-dummy-1)",
+            "options": {}
           },
           "policies": {
-            "inbound": [
-              "set-query-params-inbound"
-            ],
+            "inbound": [],
             "outbound": []
           },
           "mcp": {
