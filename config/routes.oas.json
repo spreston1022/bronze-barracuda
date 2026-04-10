@@ -20,11 +20,13 @@
             "export": "urlForwardHandler",
             "module": "$import(@zuplo/runtime)",
             "options": {
-              "baseUrl": "https://site.api.espn.com/apis/v2/sports/baseball/mlb"
+              "baseUrl": "https://site.web.api.espn.com/apis/v2/sports/baseball/mlb"
             }
           },
           "policies": {
-            "inbound": [],
+            "inbound": [
+              "set-query-params-inbound"
+            ],
             "outbound": []
           },
           "mcp": {
