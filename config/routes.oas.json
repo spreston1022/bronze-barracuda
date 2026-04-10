@@ -37,7 +37,10 @@
             "_meta": {
               "openai/outputTemplate": "ui://widget/mlb-widget.html",
               "openai/toolInvocation/invoking": "Fetching standings...",
-              "openai/toolInvocation/invoked": "Standings ready!"
+              "openai/toolInvocation/invoked": "Standings ready!",
+              "ui": {
+                "resourceUri": "ui://widget/mlb-claude-widget.html"
+              }
             }
           }
         }
@@ -85,7 +88,10 @@
             "_meta": {
               "openai/outputTemplate": "ui://widget/mlb-widget.html",
               "openai/toolInvocation/invoking": "Fetching scores...",
-              "openai/toolInvocation/invoked": "Scores ready!"
+              "openai/toolInvocation/invoked": "Scores ready!",
+              "ui": {
+                "resourceUri": "ui://widget/mlb-claude-widget.html"
+              }
             }
           }
         }
@@ -123,7 +129,10 @@
             "_meta": {
               "openai/outputTemplate": "ui://widget/mlb-widget.html",
               "openai/toolInvocation/invoking": "Fetching teams...",
-              "openai/toolInvocation/invoked": "Teams ready!"
+              "openai/toolInvocation/invoked": "Teams ready!",
+              "ui": {
+                "resourceUri": "ui://widget/mlb-claude-widget.html"
+              }
             }
           }
         }
@@ -160,7 +169,10 @@
             "_meta": {
               "openai/outputTemplate": "ui://widget/mlb-widget.html",
               "openai/toolInvocation/invoking": "Fetching news...",
-              "openai/toolInvocation/invoked": "News ready!"
+              "openai/toolInvocation/invoked": "News ready!",
+              "ui": {
+                "resourceUri": "ui://widget/mlb-claude-widget.html"
+              }
             }
           }
         }
@@ -208,7 +220,10 @@
             "_meta": {
               "openai/outputTemplate": "ui://widget/mlb-widget.html",
               "openai/toolInvocation/invoking": "Searching for player...",
-              "openai/toolInvocation/invoked": "Player found!"
+              "openai/toolInvocation/invoked": "Player found!",
+              "ui": {
+                "resourceUri": "ui://widget/mlb-claude-widget.html"
+              }
             }
           }
         }
@@ -294,7 +309,10 @@
             "_meta": {
               "openai/outputTemplate": "ui://widget/mlb-widget.html",
               "openai/toolInvocation/invoking": "Fetching player stats...",
-              "openai/toolInvocation/invoked": "Stats ready!"
+              "openai/toolInvocation/invoked": "Stats ready!",
+              "ui": {
+                "resourceUri": "ui://widget/mlb-claude-widget.html"
+              }
             }
           }
         }
@@ -351,7 +369,10 @@
             "_meta": {
               "openai/outputTemplate": "ui://widget/mlb-widget.html",
               "openai/toolInvocation/invoking": "Fetching roster...",
-              "openai/toolInvocation/invoked": "Roster ready!"
+              "openai/toolInvocation/invoked": "Roster ready!",
+              "ui": {
+                "resourceUri": "ui://widget/mlb-claude-widget.html"
+              }
             }
           }
         }
@@ -363,7 +384,7 @@
       },
       "get": {
         "operationId": "mlb-widget",
-        "summary": "MLB Widget",
+        "summary": "MLB Widget (ChatGPT)",
         "description": "Interactive widget for MLB scores, standings, stats, and news.",
         "x-zuplo-route": {
           "corsPolicy": "none",
@@ -377,15 +398,44 @@
           "policies": {
             "inbound": [],
             "outbound": [
-              "custom-code-outbound"
+              "set-sky-bridge-content-type"
             ]
           },
           "mcp": {
             "type": "resource",
-            "name": "mlb_widget",
-            "description": "Interactive widget for MLB scores, standings, stats, and news.",
+            "name": "mlb_widget_chatgpt",
+            "description": "Interactive widget for MLB scores, standings, stats, and news (ChatGPT).",
             "uri": "ui://widget/mlb-widget.html",
             "mimeType": "text/html+skybridge"
+          }
+        }
+      }
+    },
+    "/claude-widget.html": {
+      "x-zuplo-path": {
+        "pathMode": "open-api"
+      },
+      "get": {
+        "operationId": "mlb-widget-claude",
+        "summary": "MLB Widget (Claude)",
+        "description": "Interactive widget for MLB scores, standings, stats, and news (Claude).",
+        "x-zuplo-route": {
+          "corsPolicy": "none",
+          "handler": {
+            "export": "default",
+            "module": "$import(./modules/claude-widget-1)",
+            "options": {}
+          },
+          "policies": {
+            "inbound": [],
+            "outbound": []
+          },
+          "mcp": {
+            "type": "resource",
+            "name": "mlb_widget_claude",
+            "description": "Interactive widget for MLB scores, standings, stats, and news (Claude).",
+            "uri": "ui://widget/mlb-claude-widget.html",
+            "mimeType": "text/html;profile=mcp-app"
           }
         }
       }
@@ -439,6 +489,10 @@
                 {
                   "file": "./config/routes.oas.json",
                   "id": "mlb-widget"
+                },
+                {
+                  "file": "./config/routes.oas.json",
+                  "id": "mlb-widget-claude"
                 }
               ]
             }
