@@ -7,6 +7,22 @@
       },
       "name": "set-sky-bridge-content-type",
       "policyType": "custom-code-outbound"
+    },
+    {
+      "handler": {
+        "export": "SetQueryParamsInboundPolicy",
+        "module": "$import(@zuplo/runtime)",
+        "options": {
+          "params": [
+            {
+              "name": "level",
+              "value": "3"
+            }
+          ]
+        }
+      },
+      "name": "set-query-params-inbound",
+      "policyType": "set-query-params-inbound"
     }
   ]
 }
