@@ -1,0 +1,453 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "MLB Chatbot API",
+    "version": "1.0.0",
+    "description": "MLB data via ESPN and MLB Stats API — no API key required"
+  },
+  "paths": {
+    "/standings": {
+      "x-zuplo-path": {
+        "pathMode": "open-api"
+      },
+      "get": {
+        "operationId": "getStandings",
+        "summary": "Get MLB standings",
+        "description": "Returns current MLB standings for all divisions. No parameters required.",
+        "x-zuplo-route": {
+          "corsPolicy": "none",
+          "handler": {
+            "export": "urlForwardHandler",
+            "module": "$import(@zuplo/runtime)",
+            "options": {
+              "baseUrl": "https://site.api.espn.com/apis/v2/sports/baseball/mlb"
+            }
+          },
+          "policies": {
+            "inbound": [],
+            "outbound": []
+          },
+          "mcp": {
+            "type": "tool",
+            "name": "getStandings",
+            "description": "Returns current MLB standings for all divisions. No parameters required.",
+            "annotations": {
+              "readOnlyHint": true
+            },
+            "_meta": {
+              "openai/outputTemplate": "ui://widget/mlb-widget.html",
+              "openai/toolInvocation/invoking": "Fetching standings...",
+              "openai/toolInvocation/invoked": "Standings ready!"
+            }
+          }
+        }
+      }
+    },
+    "/scoreboard": {
+      "x-zuplo-path": {
+        "pathMode": "open-api"
+      },
+      "get": {
+        "operationId": "getScoreboard",
+        "summary": "Get MLB scoreboard",
+        "description": "Returns today's MLB games with live scores. Use dates parameter (YYYYMMDD) for a specific date.",
+        "parameters": [
+          {
+            "name": "dates",
+            "in": "query",
+            "required": false,
+            "description": "Date in YYYYMMDD format, e.g. 20250401. Omit for today.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "x-zuplo-route": {
+          "corsPolicy": "none",
+          "handler": {
+            "export": "urlForwardHandler",
+            "module": "$import(@zuplo/runtime)",
+            "options": {
+              "baseUrl": "https://site.api.espn.com/apis/site/v2/sports/baseball/mlb"
+            }
+          },
+          "policies": {
+            "inbound": [],
+            "outbound": []
+          },
+          "mcp": {
+            "type": "tool",
+            "name": "getScoreboard",
+            "description": "Returns today's MLB games with live scores. Use dates parameter (YYYYMMDD) for a specific date.",
+            "annotations": {
+              "readOnlyHint": true
+            },
+            "_meta": {
+              "openai/outputTemplate": "ui://widget/mlb-widget.html",
+              "openai/toolInvocation/invoking": "Fetching scores...",
+              "openai/toolInvocation/invoked": "Scores ready!"
+            }
+          }
+        }
+      }
+    },
+    "/teams": {
+      "x-zuplo-path": {
+        "pathMode": "open-api"
+      },
+      "get": {
+        "operationId": "getTeams",
+        "summary": "Get MLB teams",
+        "description": "Returns all MLB teams with IDs, names, and division info. Use this to look up a team ID before calling getTeamRoster.",
+        "x-zuplo-route": {
+          "corsPolicy": "none",
+          "handler": {
+            "export": "urlForwardHandler",
+            "module": "$import(@zuplo/runtime)",
+            "options": {
+              "baseUrl": "https://statsapi.mlb.com/api/v1",
+              "forwardSearch": true
+            }
+          },
+          "policies": {
+            "inbound": [],
+            "outbound": []
+          },
+          "mcp": {
+            "type": "tool",
+            "name": "getTeams",
+            "description": "Returns all MLB teams with IDs, names, and division info.",
+            "annotations": {
+              "readOnlyHint": true
+            },
+            "_meta": {
+              "openai/outputTemplate": "ui://widget/mlb-widget.html",
+              "openai/toolInvocation/invoking": "Fetching teams...",
+              "openai/toolInvocation/invoked": "Teams ready!"
+            }
+          }
+        }
+      }
+    },
+    "/news": {
+      "x-zuplo-path": {
+        "pathMode": "open-api"
+      },
+      "get": {
+        "operationId": "getNews",
+        "summary": "Get MLB news",
+        "description": "Returns the latest MLB news and headlines.",
+        "x-zuplo-route": {
+          "corsPolicy": "none",
+          "handler": {
+            "export": "urlForwardHandler",
+            "module": "$import(@zuplo/runtime)",
+            "options": {
+              "baseUrl": "https://site.api.espn.com/apis/site/v2/sports/baseball/mlb"
+            }
+          },
+          "policies": {
+            "inbound": [],
+            "outbound": []
+          },
+          "mcp": {
+            "type": "tool",
+            "name": "getNews",
+            "description": "Returns the latest MLB news and headlines.",
+            "annotations": {
+              "readOnlyHint": true
+            },
+            "_meta": {
+              "openai/outputTemplate": "ui://widget/mlb-widget.html",
+              "openai/toolInvocation/invoking": "Fetching news...",
+              "openai/toolInvocation/invoked": "News ready!"
+            }
+          }
+        }
+      }
+    },
+    "/people/search": {
+      "x-zuplo-path": {
+        "pathMode": "open-api"
+      },
+      "get": {
+        "operationId": "searchPlayer",
+        "summary": "Search for a player by name",
+        "description": "Search for an MLB player by name to get their player ID. Always call this first before getPlayerStats.",
+        "parameters": [
+          {
+            "name": "names",
+            "in": "query",
+            "required": true,
+            "description": "Player name to search for, e.g. 'Shohei Ohtani' or 'Mookie Betts'",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "x-zuplo-route": {
+          "corsPolicy": "none",
+          "handler": {
+            "export": "urlForwardHandler",
+            "module": "$import(@zuplo/runtime)",
+            "options": {
+              "baseUrl": "https://statsapi.mlb.com/api/v1"
+            }
+          },
+          "policies": {
+            "inbound": [],
+            "outbound": []
+          },
+          "mcp": {
+            "type": "tool",
+            "name": "searchPlayer",
+            "description": "Search for an MLB player by name to get their player ID.",
+            "annotations": {
+              "readOnlyHint": true
+            },
+            "_meta": {
+              "openai/outputTemplate": "ui://widget/mlb-widget.html",
+              "openai/toolInvocation/invoking": "Searching for player...",
+              "openai/toolInvocation/invoked": "Player found!"
+            }
+          }
+        }
+      }
+    },
+    "/people/{playerId}/stats": {
+      "x-zuplo-path": {
+        "pathMode": "open-api"
+      },
+      "get": {
+        "operationId": "getPlayerStats",
+        "summary": "Get player stats",
+        "description": "Returns season stats for a specific player. Requires a player ID — use searchPlayer first.",
+        "parameters": [
+          {
+            "name": "playerId",
+            "in": "path",
+            "required": true,
+            "description": "The MLB player ID, e.g. 660271 for Shohei Ohtani",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "stats",
+            "in": "query",
+            "required": true,
+            "description": "Type of stats. Use 'season' for current season stats.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "season",
+                "career",
+                "gameLog",
+                "yearByYear"
+              ]
+            }
+          },
+          {
+            "name": "season",
+            "in": "query",
+            "required": false,
+            "description": "Season year, e.g. 2025.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "group",
+            "in": "query",
+            "required": false,
+            "description": "Stat group: 'hitting', 'pitching', or 'fielding'",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "hitting",
+                "pitching",
+                "fielding"
+              ]
+            }
+          }
+        ],
+        "x-zuplo-route": {
+          "corsPolicy": "none",
+          "handler": {
+            "export": "urlForwardHandler",
+            "module": "$import(@zuplo/runtime)",
+            "options": {
+              "baseUrl": "https://statsapi.mlb.com/api/v1"
+            }
+          },
+          "policies": {
+            "inbound": [],
+            "outbound": []
+          },
+          "mcp": {
+            "type": "tool",
+            "name": "getPlayerStats",
+            "description": "Returns season stats for a specific player. Requires a player ID — use searchPlayer first.",
+            "annotations": {
+              "readOnlyHint": true
+            },
+            "_meta": {
+              "openai/outputTemplate": "ui://widget/mlb-widget.html",
+              "openai/toolInvocation/invoking": "Fetching player stats...",
+              "openai/toolInvocation/invoked": "Stats ready!"
+            }
+          }
+        }
+      }
+    },
+    "/teams/{teamId}/roster": {
+      "x-zuplo-path": {
+        "pathMode": "open-api"
+      },
+      "get": {
+        "operationId": "getTeamRoster",
+        "summary": "Get team roster",
+        "description": "Returns the current roster for a specific team. Use getTeams first to find the correct team ID.",
+        "parameters": [
+          {
+            "name": "teamId",
+            "in": "path",
+            "required": true,
+            "description": "The MLB team ID, e.g. 119 for the LA Dodgers, 147 for the NY Yankees",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "season",
+            "in": "query",
+            "required": false,
+            "description": "Season year, e.g. 2025",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "x-zuplo-route": {
+          "corsPolicy": "none",
+          "handler": {
+            "export": "urlForwardHandler",
+            "module": "$import(@zuplo/runtime)",
+            "options": {
+              "baseUrl": "https://statsapi.mlb.com/api/v1"
+            }
+          },
+          "policies": {
+            "inbound": [],
+            "outbound": []
+          },
+          "mcp": {
+            "type": "tool",
+            "name": "getTeamRoster",
+            "description": "Returns the current roster for a specific MLB team.",
+            "annotations": {
+              "readOnlyHint": true
+            },
+            "_meta": {
+              "openai/outputTemplate": "ui://widget/mlb-widget.html",
+              "openai/toolInvocation/invoking": "Fetching roster...",
+              "openai/toolInvocation/invoked": "Roster ready!"
+            }
+          }
+        }
+      }
+    },
+    "/mlb-widget.html": {
+      "x-zuplo-path": {
+        "pathMode": "open-api"
+      },
+      "get": {
+        "operationId": "mlb-widget",
+        "summary": "MLB Widget",
+        "description": "Interactive widget for MLB scores, standings, stats, and news.",
+        "x-zuplo-route": {
+          "corsPolicy": "none",
+          "handler": {
+            "export": "urlForwardHandler",
+            "module": "$import(@zuplo/runtime)",
+            "options": {
+              "baseUrl": "https://project-ox76b.vercel.app"
+            }
+          },
+          "policies": {
+            "inbound": [],
+            "outbound": [
+              "custom-code-outbound"
+            ]
+          },
+          "mcp": {
+            "type": "resource",
+            "name": "mlb_widget",
+            "description": "Interactive widget for MLB scores, standings, stats, and news.",
+            "uri": "ui://widget/mlb-widget.html",
+            "mimeType": "text/html+skybridge"
+          }
+        }
+      }
+    },
+    "/mcp": {
+      "x-zuplo-path": {
+        "pathMode": "open-api"
+      },
+      "post": {
+        "operationId": "mcp-server",
+        "summary": "MCP Server",
+        "description": "MLB MCP Server",
+        "x-zuplo-route": {
+          "corsPolicy": "none",
+          "handler": {
+            "export": "mcpServerHandler",
+            "module": "$import(@zuplo/runtime)",
+            "options": {
+              "name": "mlb-mcp-server",
+              "version": "1.0.0",
+              "includeStructuredContent": true,
+              "operations": [
+                {
+                  "file": "./config/routes.oas.json",
+                  "id": "getStandings"
+                },
+                {
+                  "file": "./config/routes.oas.json",
+                  "id": "getScoreboard"
+                },
+                {
+                  "file": "./config/routes.oas.json",
+                  "id": "getTeams"
+                },
+                {
+                  "file": "./config/routes.oas.json",
+                  "id": "getNews"
+                },
+                {
+                  "file": "./config/routes.oas.json",
+                  "id": "searchPlayer"
+                },
+                {
+                  "file": "./config/routes.oas.json",
+                  "id": "getPlayerStats"
+                },
+                {
+                  "file": "./config/routes.oas.json",
+                  "id": "getTeamRoster"
+                },
+                {
+                  "file": "./config/routes.oas.json",
+                  "id": "mlb-widget"
+                }
+              ]
+            }
+          },
+          "policies": {
+            "inbound": []
+          }
+        }
+      }
+    }
+  }
+}
