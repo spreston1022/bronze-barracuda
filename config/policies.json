@@ -5,7 +5,7 @@
         "export": "default",
         "module": "$import(./modules/set-sky-bridge-content-type)"
       },
-      "name": "custom-code-outbound",
+      "name": "set-sky-bridge-content-type",
       "policyType": "custom-code-outbound"
     }
   ]
